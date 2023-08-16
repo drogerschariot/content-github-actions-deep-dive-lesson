@@ -1,0 +1,33 @@
+# This is a placeholder so actions won't default to a getting started page
+
+name: Build Sample
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup python
+        uses: actions/python@v2
+        with:
+          python-version: 3.8
+      - name: Install Libraries
+        run: |
+            cd fuction;
+            python -m pip install --upgrade pip;
+            if [ -f requirments.txt ]; then pip install -r requirments.txt -t.; fi;
+      - name: bundle Zip
+        run: |
+            cd fucntion;
+            zip -r ../${{github.sha}}.zip .;
+      - name: Store zip
+        uses: actions/upload-artifact@v2
+        with: 
+          name: zipped-bundle
+          path: ${{github.sha}}.zip
